@@ -1,2 +1,30 @@
 company:
   name: Tech22
+  logo: img/averon_logo.png
+product_hmw: How might we allow people to have positive digital interactions while feeling safe and empowered?
+product_narrative: |
+  Hello world
+team:
+  picture: img/team_photo.jpg
+  roster:
+  - name: Arief Hutahaean
+    email:
+    picture:
+    program:
+  - name: Emilie Burton
+    email:
+    picture:
+    program:
+  - name: Jerry Tsou
+    email:
+    picture:
+    program:
+  - name: Ryan Kim
+    email:
+    picture:
+    program:
+assets:
+- title: Alumni Crit
+- title: Sprint 1
+- title: Crit 1
+- title: Value Creation Analysis
