@@ -20,9 +20,9 @@ team:
     picture:
     program:
   - name: Ryan Kim
-    email:
-    picture:
-    program:
+    email: rk494@cornell.edu
+    picture: img/ryan_kim.jpg
+    program: Master of Engineering in Computer Science
 assets:
 - title: Alumni Crit
   url: crit/alumni_crit_final.pdf
