@@ -1,4 +1,2 @@
-Missing company logo info
-Missing team picture info
 Missing individual picture info
-Assets we could fetch: ['report.yaml']
+Assets we could fetch: ['report.yaml', 'img/averon_logo.png', 'img/team_photo.jpg']
