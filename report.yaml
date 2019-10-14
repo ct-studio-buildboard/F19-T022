@@ -8,16 +8,16 @@ team:
   picture: img/team_photo.jpg
   roster:
   - name: Arief Hutahaean
-    email:
-    picture:
+    email: 
+    picture: img/arief_hutahaean.png
     program:
   - name: Emilie Burton
     email:
-    picture:
+    picture: img/emilie_burton.jpg
     program:
   - name: Jerry Tsou
     email:
-    picture:
+    picture: img/jerry_tsou.jpg
     program:
   - name: Ryan Kim
     email: rk494@cornell.edu
