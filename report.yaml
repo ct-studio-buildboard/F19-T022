@@ -8,21 +8,21 @@ team:
   picture: img/team_photo.jpg
   roster:
   - name: Arief Hutahaean
-    email: 
+    email: arh272@cornell.edu
     picture: img/arief_hutahaean.png
-    program:
+    program: LLM
   - name: Emilie Burton
-    email:
+    email: eb736@cornell.edu
     picture: img/emilie_burton.jpg
-    program:
+    program: HT
   - name: Jerry Tsou
-    email:
+    email: ct558@cornell.edu
     picture: img/jerry_tsou.jpg
-    program:
+    program: MBA
   - name: Ryan Kim
     email: rk494@cornell.edu
     picture: img/ryan_kim.jpg
-    program: Master of Engineering in Computer Science
+    program: CS
 assets:
 - title: Alumni Crit
   url: crit/alumni_crit_final.pdf
