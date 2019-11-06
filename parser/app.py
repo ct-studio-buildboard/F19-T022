@@ -24,6 +24,9 @@ def GetContents(url):
 	return text
 
 if __name__ == "__main__":
-	url = "https://www.ryankimdev.com"
+	url = "https://tech.cornell.edu/privacy-policy/"
 	t = GetContents(url)
-	print(t)
+	
+	file1 = open("Results/CornellTech/cornelltech_privacy.txt","w")
+	file1.write(t) 
+	file1.close() 
