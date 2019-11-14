@@ -1,0 +1,49 @@
+{
+	"manifest_version":2,
+	"name":"Parser",
+	"version":"1.0",
+
+	"description":"Extracts all the text on a page",
+	"icons":{
+		"48":"icons/border-48.png"
+	},
+
+	"permissions": [
+		"activeTab"
+	],
+
+	"content_scripts": [
+		{
+			"matches":[
+				"https://www.facebook.com/legal/terms/update",
+				"https://www.facebook.com/about/privacy/update",
+				"https://www.facebook.com/policies/cookies/",
+				"https://policies.google.com/terms",
+				"https://policies.google.com/privacy",
+				"https://www.youtube.com/t/terms",
+				"https://support.google.com/youtube/answer/2620262?hl=en",
+				"https://support.google.com/youtube/answer/2807622",
+				"https://help.instagram.com/581066165581870/?helpref=hc_fnav&bc[0]=Instagram%20Help&bc[1]=Privacy%20and%20Safety%20Center",
+				"https://help.instagram.com/325135857663734/?helpref=hc_fnav&bc[0]=Instagram%20Help&bc[1]=Privacy%20and%20Safety%20Center",
+				"https://help.instagram.com/519522125107875/?helpref=hc_fnav&bc[0]=Instagram%20Help&bc[1]=Privacy%20and%20Safety%20Center",
+				"https://www.amazon.com/gp/help/customer/display.html?ie=UTF8&nodeId=508088&ref_=footer_cou",
+				"https://www.amazon.com/gp/help/customer/display.html/ref=hp_left_v4_sib?ie=UTF8&nodeId=202135380",
+				"https://www.amazon.com/gp/help/customer/display.html/ref=hp_left_v4_sib?ie=UTF8&nodeId=201909010",
+				"https://www.spotify.com/us/legal/end-user-agreement/",
+				"https://www.spotify.com/us/legal/copyright-policy/",
+				"https://www.spotify.com/us/legal/privacy-policy/",
+				"https://help.nytimes.com/hc/en-us/articles/115014893428-Terms-of-service",
+				"https://help.nytimes.com/hc/en-us/articles/115015672188-Cookies-and-similar-technologies",
+				"https://help.nytimes.com/hc/en-us/articles/115014892108-Privacy-policy",
+				"https://help.netflix.com/en/legal/termsofuse",
+				"https://help.netflix.com/en/legal/privacy",
+				"https://twitter.com/en/tos",
+				"https://twitter.com/en/privacy",
+				"https://help.twitter.com/en/rules-and-policies/twitter-cookies",
+				"https://tech.cornell.edu/terms-conditions/",
+				"https://tech.cornell.edu/privacy-policy/"
+			],
+			"js": ["borderify.js"]
+		}
+	]
+}

@@ -1,0 +1,70 @@
+YouTube Help
+Help CenterCommunity
+YouTube Get support
+Fix a problemWatch videosManage your account & settingsJoin & manage YouTube PremiumCreate & grow your channelMonetize with the YouTube Partner ProgramPolicy, safety, and copyright
+Collective Copyright Management
+
+Songwriters and composers become members of collecting societies to collect royalties from use of their works. Collecting societies monitor performances and distribution of the works on radio, television, in public venues, and online.
+
+Collecting societies typically operate in a particular country/region and enter into a web of reciprocal deals with collecting societies in other countries/regions. These deals decide how royalties earned in one country/region are paid to the appropriate songwriters and composers in another. In this way, a Brazilian songwriter might collect royalties when a cover band plays her song in a pub in London. She might also earn royalties when a fan shares an online video in which he covers it as well.
+
+How do collecting societies affect you as a YouTube creator? If you’ve ever gotten a notice indicating that one of your videos may include copyrighted content administered by "Music Publishing Rights Collecting Society," or “one or more music publishing rights collecting societies,” it means that YouTube's Content ID system identified one or more musical compositions within your video to which a portion of the rights may be claimed by a collecting society. A link to this notification will also appear in your Video Manager, next to the uploaded video.
+
+If you get a notice like the one above and believe your video was matched to copyrighted content by mistake, first, listen again. Is there music in the background? Was someone singing or playing a cover version of a song? These are uses of a copyrighted work that often require royalties be paid to the songwriter or composer. If you're certain that no copyrighted content is included in your video, intentionally or unintentionally, you can dispute the match by clicking "I believe this copyright claim is not valid" on the copyright notices page of your account. A link to this page can also be found next to the affected video in http://www.youtube.com/my_videos.
+
+For more information please read our article about Content ID and how it works.
+
+Was this helpful?YesNo
+Learn about copyright on YouTube
+What is copyright?
+Frequently asked copyright questions
+Creative Commons
+Frequently asked questions about fair use
+Copyright Troubleshooter
+The difference between copyright takedowns and Content ID claims
+Music in this video
+©2019 Google  Privacy Policy  YouTube Terms of Service English
+ Send feedback about our Help Center
+Known Issues
+Troubleshoot problems playing videos
+Troubleshoot account issues
+Fix upload problems
+Fix YouTube Premium membership issues
+Get help with the YouTube Partner Program
+Find videos to watch
+Change video settings
+Watch videos on different devices
+Comment, subscribe, & connect with creators
+Save or share videos & playlists
+Troubleshoot problems playing videos
+Pay to watch movies & TV shows
+Sign up and manage your account
+Manage account settings
+Manage privacy settings
+Manage accessibility settings
+Troubleshoot account issues
+Learn about YouTube Premium benefits
+Manage Premium membership
+Manage Premium billing
+Get a YouTube Premium family plan
+Sign up for a student Premium membership
+Fix YouTube Premium membership issues
+Upload videos
+Edit videos & video settings
+Customize & manage your channel
+Analyze performance with analytics
+Translate videos & captions
+Manage your community & comments
+Live stream on YouTube
+YouTube Partner Program Basics
+Earn money on YouTube
+Get help with the YouTube Partner Program
+Understand ad policies for advertisers
+YouTube for Content Managers
+YouTube policies
+Reporting and enforcement
+Privacy and safety center
+Copyright and rights management
+Send feedback on...
+This help content & information
+General Help Center experience
