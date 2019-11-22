@@ -5,7 +5,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask import request
 
-#import parser
+import parser
+from summarization import summarizer
 
 app = Flask(__name__)
 CORS(app)
@@ -20,10 +21,14 @@ def parse_request():
 	#results = parser.parseContents(requested_content)
 	
 	results = requested_content
-	print(results)
+
+	parsed_results = parser.parseContents(results)
+	#print(parsed_results)
+	summary = summarizer(parsed_results,2)
+	print(summary)
 
 	response = app.response_class(
-        response = results,
+        response =  summary,
         status = 200,
         mimetype = 'text/plain'
     )

@@ -93,7 +93,16 @@ function listenForClicks() {
       if (res.length == 0) {
         console.log("error!")
       } else {
-        data_to_send = {'html':res}
+        /*
+        full_res = []
+        if (!Array.isArray(res)){
+          full_res.push(res)
+        } else {
+          full_res = res
+        }
+        */
+        full_res = res[0]
+        data_to_send = {'html':full_res}
         sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
           if (res.status == 200) {
             console.log(res.responseText)
