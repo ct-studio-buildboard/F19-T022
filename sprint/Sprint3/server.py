@@ -5,11 +5,19 @@ from flask import request
 
 app = Flask(__name__)
 
-@app.route('/', methods = ['GET', 'POST',])
-
+@app.route('/', methods=['POST'])
 def parse_request():
-	data = request.data
-	return data 
+	print("hello world");
+	print(request.json)
+	print(request.args)
+	print(request.form)
+	print(request.values)
+	print(request)
+	return request.data;
+	#data = request.data
+	#print(data)
+	#return data 
 
-app.run(debug=True)
+if __name__ == '__main__':
+    app.run()
 
