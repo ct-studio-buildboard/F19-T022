@@ -354,25 +354,26 @@ def find_matching_sentences(predict_y, bag_of_words):
 
 
 
+def return_output(d): 
+    final_output = {} 
 
-final_output = {} 
-
-for i  in d.keys() : 
-    if i == '1.0': 
-        x = "We collect personal information about your session"
-        final_output["Information Collected"] = x
-    if i == '2.0':
-        x = "To deliver our full services, you may need to submit additional contact information if you use certain tools. We can also collect information based on other privacy policies."
-        final_output['Information you submit'] = x
-    if i == '3.0': 
-        x = "We use the information you submitted"
-        final_output['Using your information'] = x 
-    if i == '4.0': 
-        x = "We won’t sell your data to third parties for their advertising or promotion activities. But, for delivering services to you, we will share your information"
-        final_output['Sharing your information'] = x 
-    if i == '5.0': 
-        x = 'You can disable cookies in your browser, but our website may not work properly if you do that.'
-        final_output['Cookies'] = x 
+    for i  in d.keys() : 
+        if i == '1.0': 
+            x = "We collect personal information about your session"
+            final_output["Information Collected"] = x
+        if i == '2.0':
+            x = "To deliver our full services, you may need to submit additional contact information if you use certain tools. We can also collect information based on other privacy policies."
+            final_output['Information you submit'] = x
+        if i == '3.0': 
+            x = "We use the information you submitted"
+            final_output['Using your information'] = x 
+        if i == '4.0': 
+            x = "We won’t sell your data to third parties for their advertising or promotion activities. But, for delivering services to you, we will share your information"
+            final_output['Sharing your information'] = x 
+        if i == '5.0': 
+            x = 'You can disable cookies in your browser, but our website may not work properly if you do that.'
+            final_output['Cookies'] = x 
+    return final_output
 
 
 
