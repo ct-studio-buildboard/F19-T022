@@ -14,7 +14,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB 
 
 
-ct_privacy = "cornelltech_privacy.txt"
+print("testing")
+ct_privacy = "cornell_privacy.txt"
 
 
 data = pd.read_csv(ct_privacy, sep = '/n', names = ['sentence'], header = None) 
@@ -65,9 +66,13 @@ def clean_text(df):
     return df
 
  
+
+
+
 clean_data = clean_text(data)
 
-clean_data.to_csv(r'clean_data_ct_privacy.csv')
+
+clean_data.to_csv(r'clean_data_c_privacy.csv')
 
 
 
@@ -77,17 +82,30 @@ clean_data.to_csv(r'clean_data_ct_privacy.csv')
 
 ###############################################
 
-ct_toste = "cornelltech_privacy_toste.csv"
+x = clean_data['sentence'].tolist()    
 
 
-X = clean_data['sentence'].tolist()
-y = clean_data['toste'].tolist() 
 
-# X_train, X_test, y_train, y_test = train_test_split(
-#     X,y, test_size = 0.25) 
+ct_toste = pd.read_csv('Clean_CT_privacy_TOSTE.csv', names = ['sentence', 'toste'])
+
+c_toste = pd.read_csv('Clean_C_privacy_TOSTE.csv', names = ['sentence', 'toste'])
 
 
-## 4. Feature Vector 
+
+X_train = [i.strip('][').split(', ')  for i in ct_toste['sentence'].tolist()]
+X_train =  [[i.replace("'", '') for i in x ]  for x in X_train] 
+y_train = ct_toste['toste'].fillna(0)
+
+X_test = [i.strip('][').split(', ')  for i in c_toste['sentence'].tolist()] 
+X_test = [[i.replace("'", '') for i in x ]  for x in X_test]
+y_test = c_toste['toste'].fillna(0)
+
+
+
+
+
+
+# 4. Feature Vector 
 #-------------------
 def count_word_frequencies(set_type):
 
@@ -113,6 +131,7 @@ def count_word_frequencies(set_type):
 
     return word_count
 
+# feature vector:
 def make_feature_vectors(set_type, word_frequencies):
     """
     input
@@ -139,9 +158,21 @@ def make_feature_vectors(set_type, word_frequencies):
 
     return all_fvs
 
+# unique words dictionary 
+bag_of_words = count_word_frequencies(X_train)    
+len(bag_of_words) 
 
-# Post processing strategy
-#----------------------------
+# feature vectors 
+X_train_fv = make_feature_vectors(X_train, bag_of_words)   
+X_test_fv = make_feature_vectors(X_test, bag_of_words)    
+
+# two feature vectors from training set 
+X_train_fv[1]   
+X_train_fv[10]   
+
+
+# 5. post processing strategy  lo
+#-----------------------------
 # normalizing technique 
 
 def log_norm(x): 
@@ -184,6 +215,14 @@ def normalize_fv(set_type, norm_type):
     return all_normalized_fvs
 
 
+X_train_norm_fv = normalize_fv(X_train_fv, log_norm)    
+X_test_norm_fv = normalize_fv(X_test_fv, log_norm) 
+
+# two feature vectors from training set 
+X_train_norm_fv[1]   
+X_train_fv[10]   
+
+
 
 # 6. logisic regression and naive bayes
 #---------------------------------------
@@ -220,11 +259,21 @@ def test_model(model, word_frequencies, X_train, X_test, y_train, y_test):
 
     sorted_dict = sorted(important_words_dict.items(), key=lambda kv: kv[1])
 
-    return accuracy, confusion, sorted_dict[-5:]
+    return accuracy, confusion, sorted_dict[-5:], predicted_y
 
 
-## 2gram  
-#---------------------------------------
+lg_accuracy, lg_confusion, lg_important_words, predict_y = test_model(train_logistic_regression, bag_of_words, X_train_norm_fv, X_test_norm_fv, y_train, y_test)
+
+nb_accuracy, nb_confusion, nb_important_words, predict_y_nb = test_model(train_naive_bayes, bag_of_words, X_train_norm_fv, X_test_norm_fv, y_train, y_test)
+
+
+
+
+
+
+#7. N-grams
+#----------
+
 def count_2grams(set_type):
 
     """
@@ -263,6 +312,7 @@ X_train_fv_2g = make_feature_vectors(X_train, two_gram_bag_of_words)
 #5) normalize feature vectors 
 X_train_norm_fv_2g = normalize_fv(X_train_fv_2g, log_norm)    
 
+
 """
 Prep data for test model
 """
@@ -273,7 +323,57 @@ X_test_fv_2g = make_feature_vectors(X_test, two_gram_bag_of_words)
 X_test_norm_fv_2g = normalize_fv(X_test_fv_2g, log_norm) 
 
 ## Test 
-lg_accuracy_2g, lg_confusion_2g, lg_important_words_2g  = test_model(train_logistic_regression, two_gram_bag_of_words, X_train_norm_fv_2g, X_test_norm_fv_2g, y_train, y_test)
-nb_accuracy_2g, nb_confusion_2g, nb_important_words_2g= test_model(train_naive_bayes,two_gram_bag_of_words,  X_train_norm_fv_2g, X_test_norm_fv_2g, y_train, y_test)
+lg_accuracy_2g, lg_confusion_2g, lg_important_words_2g, predict_y_2g_lg  = test_model(train_logistic_regression, two_gram_bag_of_words, X_train_norm_fv_2g, X_test_norm_fv_2g, y_train, y_test)
+nb_accuracy_2g, nb_confusion_2g, nb_important_words_2g, predict_y_2g_nb= test_model(train_naive_bayes,two_gram_bag_of_words,  X_train_norm_fv_2g, X_test_norm_fv_2g, y_train, y_test)
+
+
+
+
+## 2gram bag of words 
+
+d = {} 
+    
+for i , v in zip(predict_y_2g_lg, two_gram_bag_of_words.keys()): 
+    for x in X_test: 
+        if i != 0:
+            if set(v.split(' ')).issubset(x):  
+               d[str(i)] = x
+
+
+
+def find_matching_sentences(predict_y, bag_of_words): 
+    d = {} 
+        
+    for i , v in zip(predict_y, bag_of_words.keys()): 
+        for x in X_test: 
+            if i == 3:
+                print(v, x)
+                if v in x:  
+                   d[str(i)] = x
+    return d 
+
+
+
+
+final_output = {} 
+
+for i  in d.keys() : 
+    if i == '1.0': 
+        x = "We collect personal information about your session"
+        final_output["Information Collected"] = x
+    if i == '2.0':
+        x = "To deliver our full services, you may need to submit additional contact information if you use certain tools. We can also collect information based on other privacy policies."
+        final_output['Information you submit'] = x
+    if i == '3.0': 
+        x = "We use the information you submitted"
+        final_output['Using your information'] = x 
+    if i == '4.0': 
+        x = "We won’t sell your data to third parties for their advertising or promotion activities. But, for delivering services to you, we will share your information"
+        final_output['Sharing your information'] = x 
+    if i == '5.0': 
+        x = 'You can disable cookies in your browser, but our website may not work properly if you do that.'
+        final_output['Cookies'] = x 
+
+
 
 
