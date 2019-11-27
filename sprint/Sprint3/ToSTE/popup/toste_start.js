@@ -81,57 +81,110 @@ function make(desc) {
   return el;
 }
 
+function getTabContent() {
+  return browser.tabs.query({active: true, currentWindow: true}).then((tabs)=>{
+    var tab = tabs[0];
+    return browser.runtime.sendMessage({type: 'getTabContent', tabId:tab.id}, (res)=>{
+      var result = JSON.parse(res);
+      if (result.status !== 200) {
+        console.error(result.responseText);
+        if (result.responseData) {
+          console.error(result.responseData);
+        }
+        return;
+      }
+      else if (result.responseData.length == 0) {
+        console.error("NO TABS PRESENT")
+        return;
+      }
+      console.log(result)
+      return;
+    });
+  });
+}
+
 function listenForClicks() {
 
-  document.addEventListener("click", (e) => {
+  // Log the error to the console.
+  function reportError(error) {
+    console.error(`Could not ToSTE: ${error}`);
+  }
 
-    function printResult(type,content) {
+  function printResult(type,content) {}
 
-    }
-
-    function handleResponse(res) {
-      if (res.length == 0) {
-        console.log("error!")
-      } else {
-        /*
-        full_res = []
-        if (!Array.isArray(res)){
-          full_res.push(res)
-        } else {
-          full_res = res
-        }
-        */
-        full_res = res[0]
-        data_to_send = {'html':full_res}
-        sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
-          if (res.status == 200) {
-            console.log(res.responseText)
-          }
-          else {
-            //server_result = JSON.parse(res.responseText)
-            console.log(res)
-          }
-        });
+  function handleResponse(res) {
+    var result = JSON.parse(res);
+    if (result.status !== 200) {
+      console.error(result.responseText);
+      if (result.responseData) {
+        console.error(result.responseData);
       }
+      return;
     }
+    else if (result.responseData.length == 0) {
+      console.error("NO TABS PRESENT")
+      return;
+    }
+      
+    full_res = result.responseData[0]
+    data_to_send = {'html':full_res}
+    sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
+      if (res.status == 200) {
+        console.log(res.responseText)
+      }
+        else {
+        //server_result = JSON.parse(res.responseText)
+        console.error(res)
+      }
+    });
+  }
 
-    function toste_get(tabs) {
-      let tab = tabs[0]
-      let res = browser.runtime.sendMessage({type: 'getContent', id:tab.id}, handleResponse)
-      /*
-      let true_url = tabs[0].url;
-      let data_to_send = {'url':true_url}
-      console.log(true_url)
+  function tosteGet(tabs) {
+    var tab = tabs[0];
+    browser.runtime.sendMessage({type: 'getTabContent', tabId:tab.id}, (res)=>{
+      var result = JSON.parse(res);
+      if (result.status !== 200) {
+        console.error(result.responseText);
+        if (result.responseData) {
+          console.error(result.responseData);
+        }
+        return;
+      }
+      else if (result.responseData.length == 0) {
+        console.error("NO TABS PRESENT")
+        return;
+      }
+          
+      full_res = result.responseData[0]
+      data_to_send = {'html':full_res}
       sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
         if (res.status == 200) {
           console.log(res.responseText)
         }
         else {
           //server_result = JSON.parse(res.responseText)
-          console.log(res)
+          console.error(res)
         }
       });
-      */
+    });
+  }
+
+  function tosteTabReset(tabs) {
+    var tab = tabs[0];
+    browser.runtime.sendMessage({type: "resetTabContent", tabId:tab.id}, ()=>{});
+  }
+
+  document.addEventListener("click", (e) => {
+
+    if (e.target.classList.contains("toste_button")) {
+      browser.tabs.query({active: true, currentWindow: true})
+        .then(tosteGet)
+        .catch(reportError);
+    }
+    else if (e.target.classList.contains("toste_reset")) {
+      browser.tabs.query({active: true, currentWindow: true})
+        .then(tosteTabReset)
+        .catch(reportError);
     }
 
     /**
@@ -165,32 +218,6 @@ function listenForClicks() {
     }
     */
 
-    /**
-     * Just log the error to the console.
-     */
-    function reportError(error) {
-      console.error(`Could not ToSTE: ${error}`);
-    }
-
-    /**
-     * Get the active tab,
-     * then call "beastify()" or "reset()" as appropriate.
-     */
-    if (e.target.classList.contains("toste")) {
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(toste_get)
-        .catch(reportError);
-    }
-    else {
-      console.log(e.target);
-    }
-    /*
-    else if (e.target.classList.contains("reset")) {
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(reset)
-        .catch(reportError);
-    }
-    */
   });
 }
 
@@ -210,5 +237,6 @@ function reportExecuteScriptError(error) {
  * If we couldn't inject the script, handle the error.
  */
 browser.tabs.executeScript({file: "/content_scripts/toste.js"})
+.then(getTabContent)
 .then(listenForClicks)
 .catch(reportExecuteScriptError);
