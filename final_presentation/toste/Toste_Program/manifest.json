@@ -1,0 +1,20 @@
+{
+	"manifest_version":2,
+	"name":"ToSTE",
+	"version":"1.0",
+	"description":"Interprets a Terms of Service webpage",
+	"icons":{
+		"48":"icons/toste-48.jpg"
+	},
+	"permissions": [
+		"activeTab"
+	],
+	"browser_action": {
+		"default_icon": "icons/toste_logo.png",
+		"default_title": "ToSTE",
+		"default_popup": "popup/toste_start.html"
+	},
+	"web_accessible_resources": [
+		"popup/img/toste_logo.png"
+	]
+}
