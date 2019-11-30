@@ -10,6 +10,7 @@ from summarization import summarizer
 
 import CustomHTMLParser
 import json
+from collections import namedtuple
 
 app = Flask(__name__)
 CORS(app)
@@ -18,13 +19,13 @@ CORS(app)
 def parse_request():
 	request_form = request.form
 	#requested_url = request_form.get('url')
-	requested_content = request.form.get('html')
+	requested_content = request.form.get('input');
 	
 	#results = parser.GetContents(requested_url)
 	#results = parser.parseContents(requested_content)
 	
+	#results = json.loads(requested_content, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()));
 	results = json.loads(requested_content);
-	print(results[0].header)
 
 	#html_parser = CustomHTMLParser.GetHTMLContents(results)
 	#print(html_parser.parse_data().PrintDetails())
@@ -38,14 +39,20 @@ def parse_request():
 
 	summary = []
 	for res in results:
-		to_add = {"raw": summarizer(res.header,1), "text":summarizer(res.text,5)}
-		new_results.append(to_add);
+		#print(res["header"]["raw"], res["text"])
+		new_header = summarizer(res["header"]["raw"],1)
+		new_text = summarizer(res["text"],2)
+		if (len(new_header) == 0):
+			new_header = [res["header"]["raw"]]
+		#print(new_header, new_text);
+		to_add = {"header": new_header[0], "text": new_text}
+		summary.append(to_add);
 
 	#summary = summarizer(parsed_results,5)
-	print(summary)
+	#print("FINAL SUMMARY: ", summary)
 
 	response = app.response_class(
-        response =  summary,
+        response =  json.dumps(summary),
         status = 200,
         mimetype = 'text/plain'
     )

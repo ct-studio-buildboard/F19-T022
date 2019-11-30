@@ -9,9 +9,9 @@
 var prev, prev_background_style;  // hold reference and background style information of what we're hovering over
 var currently_working = false;    // boolean to check if toste is doing something right now.
 
-var filtered_tags = ["HEADER", "FOOTER", "SCRIPT", "NOSCRIPT", "STYLE", "NAV", "PATH", "FORM", "BUTTON", "INPUT", "svg", "SVG"]
-var prohibited_classes = ["sidebar", "nav", "navigation", "announcement"]
-var prohibited_text_tags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"]
+var filtered_tags = ["HEADER", "FOOTER", "SCRIPT", "NOSCRIPT", "STYLE", "NAV", "PATH", "FORM", "BUTTON", "INPUT", "svg", "SVG"];
+var prohibited_classes = ["sidebar", "nav", "navigation", "announcement"];
+var prohibited_text_tags = ["B", "STRONG", "I", "EM", "MARK", "SMALL", "DEL", "INS", "SUB", "SUP"];
 
 // --- END GLOBAL VARIABLES ---
 
@@ -251,10 +251,6 @@ function parseInnerText(html, lengthThreshold = 5) {
           score.header += 1;
       }
 
-      if (textElement == "COOKIES") {
-        console.log(score)
-      }
-
       // Second classification: what's the beginning character?
       // If the first character is alphabet, equally apply to header or text
       if (typeof textElement[0] !== "undefined" && textElement[0].match(/[a-z]/i)) {
@@ -267,10 +263,6 @@ function parseInnerText(html, lengthThreshold = 5) {
       }
       else {
         score.useless += 2;
-      }
-
-      if (textElement == "COOKIES") {
-        console.log(score)
       }
 
       // Third classification: is it long or short?
@@ -288,10 +280,6 @@ function parseInnerText(html, lengthThreshold = 5) {
       else {
         score.useless += 1;
         score.header += 1;
-      }
-
-      if (textElement == "COOKIES") {
-        console.log(score)
       }
 
       // Fourth classification: capitalization?
@@ -314,10 +302,6 @@ function parseInnerText(html, lengthThreshold = 5) {
         score.text += 1;
       }
 
-      if (textElement == "COOKIES") {
-        console.log(score)
-      }
-
       // if useless score is greater than all other scores, return -1; else, return score
       //if (score.useless > score.header && score.useless > score.text) {
       //  return -1;
@@ -336,14 +320,8 @@ function parseInnerText(html, lengthThreshold = 5) {
       let itemArray = item.split('\n');
       itemArray = itemArray.reduce((sum,innerItem)=>{
         let innerItemScore = classificationScore(innerItem)
-        if (innerItem == "COOKIES") {
-            console.log(innerItemScore, innerItemScore.useless <= innerItemScore.header || innerItemScore.useless <= innerItemScore.text)
-          }
-        //console.log(innerItemScore)
         if (innerItemScore.useless <= innerItemScore.header || innerItemScore.useless <= innerItemScore.text) {
           delete innerItemScore["useless"];
-          //console.log(innerItem)
-          //console.log(innerItemScore)
           var scoreArray = Object.keys(innerItemScore).map(function(key) {
             return [key, innerItemScore[key]];
           });
@@ -401,7 +379,6 @@ function segmentParsed(arr) {
     var curSegment = new Segment();
 
     var new_arr = arr.reduce((toReturnArr, curItem, curItemIndex)=>{
-      console.log(curItem);
       if (curItem.category == 'header') {
         if (curSegment.header == null) {
           curSegment.header = curItem;
@@ -549,7 +526,6 @@ function segmentParsed(arr) {
         }
         tempSegmentArray = [];
         toReturnArr.push(tempSegment);
-        console.log("FINAL PUSH")
       }
 
       return toReturnArr;
@@ -644,7 +620,7 @@ browser.runtime.onMessage.addListener((message, tabId, sendResponse) => {
         var bodyHTMLParsed = parseInnerText(bodyHTML)
         console.log(bodyHTMLParsed);
         var trulySegmented = segmentParsed(bodyHTMLParsed);
-        console.log(trulySegmented);
+        //console.log(trulySegmented);
 
         // Set response values for return
         response.status = 200;

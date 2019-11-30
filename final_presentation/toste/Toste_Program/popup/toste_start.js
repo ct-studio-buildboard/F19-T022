@@ -1,8 +1,19 @@
 var tabData = null;
 var is_working = false;
 var sidebar = document.getElementById("toste_sidebar");
-var mainContents = document.getElementById("toste_contents");
+var mainContent = {
+  container: document.getElementById("toste_popup_content"),
+  default_message_element: document.getElementById("toste_popup_content_default_message"),
+  default_message: "Click on \"ToSTE\" on the top left corner once your data has loaded!",
+  loading_preprocess_message: "Hold on, ToSTE is parsing your webpage right now..."
+}
 var responseDiv = document.getElementById("popup_response");
+var errorDiv = {
+  container: document.getElementById("toste_error_content"),
+  error_message: document.getElementById("toste_error_main"),
+  error_content: document.getElementById("toste_error_response"),
+  default_error_message: "Can't ToSTE this web page.<br/>Try a different page, or contact the developers."
+}
 
 function isArray(a) { return Object.prototype.toString.call(a) === "[object Array]";  }
 
@@ -69,6 +80,39 @@ function make(desc) {
  * the content script in the page.
  */
 
+ function preparePopup() {
+  // Empty sidebar
+  sidebar.innerHTML = "";
+
+  // Reset error div and hide it
+  errorDiv.container.classList.add("hidden");
+  errorDiv.error_message.innerHTML = errorDiv.default_error_message;
+  errorDiv.error_content.innerHTML = "";
+
+  // show main content with appropriate message, remove any possible parsed segments existing
+  clearPopupContent();
+  mainContent.default_message_element.innerHTML = mainContent.loading_preprocess_message;
+  mainContent.default_message_element.classList.remove("hidden");
+  mainContent.container.classList.remove("hidden");
+
+  // Return for next sequence in chain of promises
+  return;
+}
+
+function clearPopupContent() {
+  var existing_parsed_segments = mainContent.container.getElementsByClassName("toste_parsed_segment");
+  while (existing_parsed_segments[0]) {
+    mainContent.container.removeChild(existing_parsed_segments[0]);
+  }
+}
+
+function printPopupError(message,content) {
+  errorDiv.error_message.innerHTML = message;
+  errorDiv.error_content.innerHTML = content;
+  mainContent.container.classList.add("hidden");
+  errorDiv.container.classList.remove("hidden");
+}
+
 function initializeTabs() {
   return browser.tabs.query({active: true, currentWindow: true});
 }
@@ -90,7 +134,9 @@ function parseTabContent(res) {
     console.error("NO TAB DATA PRESENT")
     tabData = [];
   }
-  tabData = res.responseData;
+  else {
+    tabData = res.responseData;
+  }
 
   console.log(tabData);
   return;
@@ -114,7 +160,8 @@ function printPreview(textComponent) {
   toPrintText = toPrint.getElementsByClassName("toste_sidebar_text")[0];
 
   for (var t of text) {
-    toPrintText.appendChild(make(["p",t]))
+    var newT = t.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+    toPrintText.appendChild(make(["p",newT]))
   }
 
   toPrint.addEventListener("click", function() {
@@ -124,13 +171,19 @@ function printPreview(textComponent) {
   sidebar.appendChild(toPrint);
 }
 
+function printParsed(segment) {
+  var header = segment.header;
+  var text = segment.text.join('\n');
+  var new_parsed_segment = make(["div",{class:"toste_parsed_segment"},["p",{class:"toste_parsed_header"},header]]);
+  var new_parsed_segment_text = make(["p",{class:"toste_parsed_text"},text]);
+  new_parsed_segment_text.innerHTML = text.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+  new_parsed_segment.appendChild(new_parsed_segment_text);
+  mainContent.container.appendChild(new_parsed_segment);
+  return;
+}
+
 function listenForClicks() {
-
-  // Log the error to the console.
-  function reportError(error) {
-    console.error(`Could not ToSTE: ${error}`);
-  }
-
+  /*
   function handleResponse(res) {
     var result = JSON.parse(res);
     if (result.status !== 200) {
@@ -149,7 +202,8 @@ function listenForClicks() {
     data_to_send = {'html':full_res}
     sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
       if (res.status == 200) {
-        console.log(res.responseText)
+        var server_result = JSON.parse(res.response)
+        console.log(server_result)
       }
         else {
         //server_result = JSON.parse(res.responseText)
@@ -157,37 +211,47 @@ function listenForClicks() {
       }
     });
   }
+  */
+
+  function handleRequestFromPython(res) {
+    if (res.status == 200) {
+      console.log("Successful response from ToSTE server.");
+      // The parsed returns
+      var server_result = JSON.parse(res.responseText);
+
+      // remove existing toste_parsed_sgements already existing inside, for good measure
+      clearPopupContent();
+      mainContent.default_message_element.classList.add("hidden");
+      for (var item of server_result) {
+        printParsed(item);
+      }
+
+      console.log(server_result);
+    }
+    else {
+      console.error(res.responseText);
+      printPopupError("Uh Oh! Cannot connect to ToSTE Servers!", res.responseText);
+    }
+  }
 
   function mouseActions(e) {
     if (e.target.classList.contains("toste_button")) {
-      console.log("Getting clicks")
-      console.log(tabData)
-
-      full_res = tabData;
-      data_to_send = {'html':JSON.stringify(full_res)}
-      sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded',(res)=>{
-        if (res.status == 200) {
-          console.log(res.responseText)
-        }
-          else {
-          //server_result = JSON.parse(res.responseText)
-          console.error(res)
-        }
-      });
-      /*
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(tosteGet)
-        .catch(reportError);
-      */
+      console.log("Sending Data to ToSTE Server");
+      // Copy the data in case of mutation
+      full_res = JSON.parse(JSON.stringify(tabData));
+      // prepare response
+      data_to_send = {'input':JSON.stringify(full_res)}
+      // Print appropriate message on popup
+      clearPopupContent();
+      mainContent.default_message_element.innerHTML = mainContent.loading_preprocess_message;
+      mainContent.default_message_element.classList.remove("hidden");
+      // Send result, pipe return to "handleRequestFromPython(res)"
+      sendHTTPRequest('POST','http://127.0.0.1:5000/',data_to_send,'application/x-www-form-urlencoded', handleRequestFromPython);
     }
     else if (e.target.classList.contains("toste_reset")) {
       console.log("Resetting")
       tabData = null;
-      /*
-      browser.tabs.query({active: true, currentWindow: true})
-        .then(tosteTabReset)
-        .catch(reportError);
-      */
+      main();
     }
      /**
      * Insert the page-hiding CSS into the active tab,
@@ -224,6 +288,10 @@ function listenForClicks() {
   for (var seg of tabData) {
     printPreview(seg);
   }
+
+  mainContent.default_message_element.innerHTML = mainContent.default_message;
+  errorDiv.container.classList.add("hidden");
+  mainContent.container.classList.remove("hidden");
 
   document.addEventListener("click",mouseActions);
 
@@ -265,9 +333,8 @@ function listenForClicks() {
  * Display the popup's error message, and hide the normal UI.
  */
 function reportExecuteScriptError(error) {
-  document.querySelector("#popup-content").classList.add("hidden");
-  document.querySelector("#error-content").classList.remove("hidden");
   console.error(`Failed to execute content script: ${error.message}`);
+  printPopupError("Something's Wrong With ToSTE!", error.message);
 }
 
 /**
@@ -278,6 +345,7 @@ function reportExecuteScriptError(error) {
 
 function main() {
   browser.tabs.executeScript({file: "/content_scripts/toste.js"})
+  .then(preparePopup)
   .then(initializeTabs)
   .then(extractTabContent)
   .then(parseTabContent)
