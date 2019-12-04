@@ -28,11 +28,21 @@ team:
     picture: img/ryan_kim.jpg
     program: CS
 assets:
-- title: Alumni Crit
+- title: Alumni Critique [Sep. 19, 2019]
   url: crit/alumni_crit_final.pdf
-- title: Sprint 1
+- title: Sprint 1 [Sep. 27, 2019]
   url: sprint/sprint_1.pdf
-- title: Crit 1
+- title: Critique 1 [Oct. 3, 2019]
   url: crit/crit_1.pdf
-- title: Value Creation Analysis
+- title: Value Creation Analysis [Oct. 15, 2019]
   url: documents/value_creation_analysis.pdf
+- title: Sprint 2 [Oct. 25, 2019]
+  url: sprint/sprint_2.pdf
+- title: Critique 2 [Oct. 29, 2019]
+  url: crit/crit_2.pdf
+- title: Critique 3 [Nov. 19, 2019]
+  url: crit/crit_3.pdf
+- title: Sprint 3 [Nov. 22, 2019]
+  url: sprint/sprint_3.pdf
+- title: Final Presentation [Dec. 3, 2019]
+  url: final_presentation/final_presentation.pdf
