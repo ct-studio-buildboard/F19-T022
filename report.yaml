@@ -3,7 +3,11 @@ company:
   logo: img/averon_logo.png
 product_hmw: How might we allow people to have positive digital interactions while feeling safe and empowered?
 product_narrative: |
-  Hello world
+  Feeling safe in the digital world has a lot to do with the concept of privacy - it is about your data. Understanding your privacy gives YOU the power to make decisions on it.|
+  In the digital world, information about privacy is set out in Terms of Services, or ToS for short. This document contains how a company collects your data, use it, and share it. Unfortunately, ToS's generally are long and full of legal jargon. So, few people read it.|
+  This raises a problem: on the one hand, people care about privacy, but on the other, they don't read documents that govern it. How do we solve that problem?|
+  Our solution is ToSTE: the "Terms of Service Text Evaluator" - A web extension that reads ToS on websites analyzes the complicated privacy clauses using machine learning, summarizes the clauses, and presents them in simpler language to users. With simpler ToS, users can understand ToS in a short amount of time and can make educated decisions on their data.|
+  We believe knowledge is power. ToSTE makes Terms of Service accessible so that one can understand their rights and privacy.
 team:
   picture: img/team_photo.jpg
   roster:
